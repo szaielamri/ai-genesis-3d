@@ -22,3 +22,8 @@ yarn-debug.log*
 pnpm-debug.log*
 logs/
 *.log
+
+# Simulation database
+backend/data/
+*.sqlite
+*.sqlite-*

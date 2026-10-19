@@ -2,20 +2,22 @@
   "name": "ai-genesis-3d",
   "private": true,
   "version": "0.1.0",
-  "description": "3D AI simulation of agents with needs, foraging, and reproduction.",
+  "description": "AI Genesis, a 3D artificial life simulation.",
   "workspaces": [
+    "shared",
     "backend",
     "frontend"
   ],
   "scripts": {
     "dev": "concurrently -n server,web -c cyan,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
     "dev:backend": "npm run dev -w backend",
-    "dev:frontend": "npm run dev -w frontend"
+    "dev:frontend": "npm run dev -w frontend",
+    "typecheck": "npm run typecheck -w backend && npm run typecheck -w frontend"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }

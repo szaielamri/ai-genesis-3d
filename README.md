@@ -1,24 +1,20 @@
-# AI Genesis 3D
+# AI Genesis
 
-A small simulation of agents that get hungry, search for food, and reproduce. The backend advances the world on a tick loop and streams it over Socket.io. The frontend renders that world in Three.js.
+A 3D artificial life simulation. Agents get hungry, rest, seek company, study the land, raise buildings, and have children. The backend advances the world once per second and streams it over Socket.io. The frontend renders that world in Three.js.
+
+At 1x, one tick is one second and a quarter of a year. Adulthood is age 18. Time scale can run at 2x or 5x.
+
+## Layout
 
 ```
-ai-genesis-3d/
-├── backend/
-│   └── src/
-│       ├── simulation/    Tick loop, needs, reproduction
-│       ├── models/        Agent and world state
-│       └── server.js      Express and Socket.io
-└── frontend/
-    └── src/
-        ├── components/    Three.js canvas and HUD
-        ├── hooks/         WebSocket connection
-        └── App.jsx
+shared/     Agent, DNA, world, and terrain types
+backend/    Tick loop, genetics, tech tree, SQLite, Socket.io
+frontend/   React, Tailwind, react-three-fiber dashboard
 ```
 
 ## Requirements
 
-- Node.js 20 or newer
+- Node.js 22 or newer (the server stores the world with Node's built-in SQLite)
 
 ## Run
 
@@ -27,19 +23,17 @@ npm install
 npm run dev
 ```
 
-- Simulation server: http://localhost:3001
-- Viewer: http://localhost:5173
+- World view: http://localhost:5173
+- Simulation API: http://localhost:3001/health
 
-Pause, resume, and reset are in the HUD. Reset rebuilds the colony on the server.
+Drag to orbit, scroll to zoom, and click an agent to follow them and open the inspector. Pause, 1x / 2x / 5x, and reset sit at the bottom of the screen.
 
-## How a tick works
+The live world is saved to `backend/data/genesis.sqlite` and restored on the next launch.
 
-Each tick, every living agent:
+## Rules
 
-1. Gains hunger and spends a little energy.
-2. Wanders until hunger crosses a threshold, then walks toward a nearby food source.
-3. Eats when it reaches food, which lowers hunger and restores energy.
-4. Dies if hunger maxes out or energy hits zero.
-5. May reproduce when it is old enough, well fed, and the colony is under the population cap.
-
-Food reappears over time. Color shifts slightly with each generation.
+- Hunger falls over time. Below 20, health falls with it.
+- Energy falls while moving and returns while resting.
+- Social falls when an agent is isolated, and rises when they reach someone.
+- Two adults of opposite sex, close together, with social and health above 70, can reproduce. The child inherits DNA by single-point crossover plus a 5% drift, and the generation is one past the older parent.
+- Curious agents gather research at obelisks. The society moves through Primitive, Agricultural, Metallurgy, Industrial, and the Digital Era. Those eras unlock huts, farms, workshops, and research hubs.
