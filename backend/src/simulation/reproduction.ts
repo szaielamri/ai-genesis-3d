@@ -13,6 +13,10 @@ import { nextId } from '../ids.ts'
 import { takeName } from '../names.ts'
 import { POPULATION_CAP } from '../world.ts'
 
+export function areLinealKin(a: Agent, b: Agent): boolean {
+  return a.parentIds.includes(b.id) || b.parentIds.includes(a.id)
+}
+
 function childNear(parentA: Agent, parentB: Agent): { x: number; z: number } {
   const x = (parentA.position.x + parentB.position.x) / 2 + (Math.random() - 0.5) * 1.2
   const z = (parentA.position.z + parentB.position.z) / 2 + (Math.random() - 0.5) * 1.2
@@ -60,7 +64,7 @@ export function reproduce(world: WorldState): void {
     let partner: Agent | null = null
     let partnerDistance = 2.6
     for (const other of eligible) {
-      if (other.id === agent.id || used.has(other.id) || other.gender === agent.gender) continue
+      if (other.id === agent.id || used.has(other.id) || other.gender === agent.gender || areLinealKin(agent, other)) continue
       const distance = distance2D(agent.position, other.position)
       if (distance < partnerDistance) {
         partner = other
@@ -69,7 +73,7 @@ export function reproduce(world: WorldState): void {
     }
     if (!partner) continue
     const fertility = (agent.dna.fertility + partner.dna.fertility) / 2
-    if (Math.random() > 0.08 + fertility * 0.22) continue
+    if (Math.random() > 0.2 + fertility * 0.45) continue
 
     const child = makeChild(agent, partner)
     world.agents.push(child)

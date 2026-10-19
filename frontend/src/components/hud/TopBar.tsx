@@ -7,30 +7,30 @@ export default function TopBar({ state, connected }: { state: WorldState | null;
   const next = state?.stats.nextEra
 
   return (
-    <header className={`pointer-events-none absolute left-3 right-3 top-3 z-10 px-4 py-3 ${panel}`}>
-      <div className="flex flex-wrap items-end justify-between gap-4">
+    <header className={`pointer-events-none absolute left-3 right-3 top-3 z-10 max-w-[calc(100%-1.5rem)] px-4 py-3 ${panel}`}>
+      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <div>
           <p className="font-serif text-lg tracking-[0.22em] text-[#f3f6ef]">AI GENESIS</p>
           <p className="mt-1 text-xs text-[#b7cbb8]">
             {connected ? `${state ? phaseLabel(state.dayPhase) : 'Linking'} · Year ${year}` : 'Server offline'}
           </p>
         </div>
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-1 text-xs sm:grid-cols-4">
+        <dl className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
           <div>
             <dt className="uppercase tracking-[0.14em] text-[#93aa96]">Population</dt>
-            <dd className="font-mono text-lg text-[#f4f7f1]">{state?.stats.population ?? 0}</dd>
+            <dd className="font-mono text-base text-[#f4f7f1]">{state?.stats.population ?? 0}</dd>
           </div>
           <div>
             <dt className="uppercase tracking-[0.14em] text-[#93aa96]">Generation</dt>
-            <dd className="font-mono text-lg text-[#f4f7f1]">{state?.stats.generation ?? 0}</dd>
+            <dd className="font-mono text-base text-[#f4f7f1]">{state?.stats.generation ?? 0}</dd>
           </div>
           <div>
             <dt className="uppercase tracking-[0.14em] text-[#93aa96]">Births</dt>
-            <dd className="font-mono text-lg text-[#f4f7f1]">{state?.stats.births ?? 0}</dd>
+            <dd className="font-mono text-base text-[#f4f7f1]">{state?.stats.births ?? 0}</dd>
           </div>
           <div>
             <dt className="uppercase tracking-[0.14em] text-[#93aa96]">Tech</dt>
-            <dd className="font-mono text-lg text-[#e3b15a]">{state?.era ?? '—'}</dd>
+            <dd className="font-mono text-base text-[#e3b15a]">{state?.era ?? '—'}</dd>
           </div>
         </dl>
       </div>

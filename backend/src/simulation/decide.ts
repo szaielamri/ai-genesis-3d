@@ -10,6 +10,7 @@ import {
 } from 'ai-genesis-shared'
 import { pushEvent } from '../events.ts'
 import { findBuildSite, nextBuildingType, siteIsOpen, tryConstruct } from './building.ts'
+import { areLinealKin } from './reproduction.ts'
 
 function nearestOther(agent: Agent, agents: Agent[]): Agent | null {
   let best: Agent | null = null
@@ -115,7 +116,7 @@ export function decide(agent: Agent, world: WorldState): void {
   if (agent.reproduceCooldown <= 0 && agent.age > 18 && agent.needs.social > 70 && agent.needs.health > 70) {
     let bestDistance = 8
     for (const other of world.agents) {
-      if (other.id === agent.id || other.gender === agent.gender || other.age <= 18) continue
+      if (other.id === agent.id || other.gender === agent.gender || other.age <= 18 || areLinealKin(agent, other)) continue
       const distance = distance2D(agent.position, other.position)
       if (distance < bestDistance) {
         mate = other
@@ -135,7 +136,7 @@ export function decide(agent: Agent, world: WorldState): void {
     return
   }
 
-  if (agent.needs.social < 55 && nearest) {
+  if (agent.needs.social < 74 && nearest) {
     approachPoint(agent, nearest)
     if (nearestDistance < 2.4) {
       agent.status = 'SOCIALIZING'
@@ -162,7 +163,7 @@ export function decide(agent: Agent, world: WorldState): void {
       agent.status = 'RESEARCHING'
       const digital = world.era === 'Digital Era' ? 1.55 : 1
       const hub = world.buildings.some((building) => building.type === 'research_hub') ? 1.35 : 1
-      world.researchPoints += agent.dna.curiosity * agent.dna.learningRate * 2.4 * digital * hub
+      world.researchPoints += agent.dna.curiosity * agent.dna.learningRate * 3.8 * digital * hub
       insight.amount = Math.max(0, insight.amount - 0.75)
       agent.needs.energy = clamp(agent.needs.energy - 0.7, 0, 100)
     } else {
