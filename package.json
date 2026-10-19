@@ -1,0 +1,21 @@
+{
+  "name": "ai-genesis-3d",
+  "private": true,
+  "version": "0.1.0",
+  "description": "3D AI simulation of agents with needs, foraging, and reproduction.",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,web -c cyan,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "dev:backend": "npm run dev -w backend",
+    "dev:frontend": "npm run dev -w frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
